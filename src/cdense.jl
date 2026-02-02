@@ -23,15 +23,14 @@ end
 
 
 # Initialize parameters for the layer
-function LuxCore.initialparameters(rng::AbstractRNG, l::CDense{addbias}) where {addbias}
+function LuxCore.setup(rng::AbstractRNG, l::CDense{addbias}) where {addbias}
     p = (;chebycoeffs = l.init(rng, Float32, l.inputdim, l.outdim, l.degree + 1) .* (1 / (l.inputdim * (l.degree + 1))))
-    p = (;p..., arange = collect(Float32, 0:l.degree))
 
     p = if addbias
         (;p..., B = zeros(Float32, 1, l.outdim))
     end
-
-    p
+    st = (;arange = collect(Float32, 0:l.degree))
+    p,st
 end
 
 # Compute the number of parameters
@@ -54,7 +53,7 @@ function (l::CDense{addbias})(x::AbstractArray, p, st) where {addbias}
     x = repeat(x, 1, 1, l.degree + 1)
 
     x = acos.(x)
-    x = x .+ reshape(p.arange, 1, 1, :)
+    x = x .+ reshape(st.arange, 1, 1, :)
     x = cos.(x)
 
     y = batched_mul(x, p.chebycoeffs)  # Equivalent to einsum "bid,iod->bo"
