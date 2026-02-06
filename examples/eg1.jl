@@ -12,6 +12,7 @@ using Random, LinearAlgebra
 using Zygote, Lux, ComponentArrays
 using MLDataDevices, CUDA, LuxCUDA
 using BenchmarkTools
+using cuTENSOR
 
 # configure BLAS
 ncores = min(Sys.CPU_THREADS, length(Sys.cpu_info()))
