@@ -12,6 +12,7 @@ using Random, LinearAlgebra
 using Zygote, Lux, ComponentArrays
 using MLDataDevices, CUDA, LuxCUDA
 using BenchmarkTools
+using cuTENSOR
 
 # configure BLAS
 ncores = min(Sys.CPU_THREADS, length(Sys.cpu_info()))
@@ -83,7 +84,7 @@ function main(N=1000)
     pK3 = ComponentArray(pK3) |> device
     pK4 = ComponentArray(pK4) |> device
 
-    stM, stK1, stK2, stK3, stK4 = device(stM), device(stK1), device(stK2), device(stK4), device(stK4)
+    stM, stK1, stK2, stK3, stK4 = device(stM), device(stK1), device(stK2), device(stK3), device(stK4)
 
     f_mlp(p)  = mlp(x, p, stM)[1] |> sum
     f_kan1(p) = kan1(x, p, stK1)[1] |> sum
