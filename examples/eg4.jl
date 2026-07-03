@@ -3,6 +3,7 @@ using MLDataDevices
 using Lux, Zygote, Random, Statistics, Plots, CUDA, LuxCUDA, ComponentArrays
 using Optimisers, OptimizationOptimJL
 using cuTENSOR
+using Test
 
 cpud = cpu_device()
 gpud = gpu_device()
